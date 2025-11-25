@@ -12,7 +12,7 @@ const installSpecifyingVersionSemantic = require('./installSpecifyingVersionSema
 const preInstall = require('./preInstall.task');
 const cleanupNpmrc = require('./cleanupNpmrc.task');
 const windUpJob = require('./windUpJob.task');
-const handleNpmConfig = require('./handleNpmConfig.task');
+const preflight = require('./preflight.task');
 const inputs = require('./inputs.json');
 
 /**
@@ -27,7 +27,7 @@ const release = async () => {
   await installSpecifyingVersionSemantic();
   await preInstall(core.getInput(inputs.extra_plugins));
   await preInstall(core.getInput(inputs.extends));
-  await handleNpmConfig();
+  await preflight();
 
   // Disable husky hooks automatically to prevent them from interfering with the automated commit.
   core.debug('Disabling husky hooks by setting HUSKY=0.');
