@@ -29,6 +29,10 @@ const release = async () => {
   await preInstall(core.getInput(inputs.extends));
   await handleNpmConfig();
 
+  // Disable husky hooks automatically to prevent them from interfering with the automated commit.
+  core.debug('Disabling husky hooks by setting HUSKY=0.');
+  process.env.HUSKY = '0';
+
   if (core.getInput(inputs.unset_gha_env) === 'true') {
     core.debug('Unset GITHUB_ACTIONS environment variable');
     delete process.env.GITHUB_ACTIONS;
