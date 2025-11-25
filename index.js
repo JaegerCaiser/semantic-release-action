@@ -1,19 +1,20 @@
 const exec = require('./src/_exec');
 const path = require('path');
+const core = require('@actions/core');
 
 const run = async () => {
   // Install Dependencies
-  {
-    const {stdout, stderr} = await exec('npm install --only=prod --no-audit --silent', {
+  try {
+    const {stdout} = await exec('npm install --only=prod --no-audit --silent', {
       cwd: path.resolve(__dirname)
     });
     console.log(stdout);
-    if (stderr) {
-      return Promise.reject(stderr);
-    }
+  } catch (error) {
+    core.setFailed(`Failed to install dependencies: ${error.message}`);
+    return;
   }
 
   require('./src/index')();
 };
 
-run().catch(console.error);
+run();
